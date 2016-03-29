@@ -1,0 +1,6 @@
+*.sublime-*
+node_modules
+docs
+Procfile
+secret.json
+*.log
