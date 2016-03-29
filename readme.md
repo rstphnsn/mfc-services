@@ -18,9 +18,9 @@ More info on installing MongoDB can be found here: http://docs.mongodb.org/manua
 
 `$ git clone https://github.com/rstphnsn/mfc-services.git mfc-services`
 
-`cd mfc-admin`
+`cd mfc-services`
 
-### Configure your instance
+### Configure the API
 
 To run the app you will need to create a `secret.json` in the root of the site
 
@@ -54,4 +54,12 @@ The services will start running on locahost:3001
 
 At first run your database will be empty. You can use the services to add bookings.
 
+
+### Deployment
+
+To run the services using an externally hosted Mongo database provide DB_URL process envirenment variable in the start up command.
+
+Example Procfile:
+
+`web: DB_URL=mongodb://<dbuser:username>:<dbuser:password>@ds021979.mlab.com:<db:port>/mfc node app.js`
 
