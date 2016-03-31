@@ -1,7 +1,7 @@
 var mongo = require('mongodb'),
     errors = require('./errors'),
     MongoClient = require('mongodb').MongoClient,
-    DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/chckn',
+    DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/mfc',
     db,
     DB_TABLE = 'bookings',
     ObjectID = mongo.ObjectID;
@@ -44,9 +44,75 @@ exports.findAll = function (req, res) {
     });
 };
 
+exports.findByCottage = function (req, res) {
+    var cottage = req.params.cottage;
+    console.log('Retrieving bookings by cottage: ' + cottage);
+    db.collection(DB_TABLE, function (err, collection) {
+        if (err) {
+            err = errors.formatError(err);
+            console.log('Error: ' + err);
+            res.status(400).send({'error': {'code': 400, 'message': err}});
+        } else {
+            collection.find({'cottage': cottage}).toArray(function (err, items) {
+                if (err) {
+                    err = errors.formatError(err);
+                    console.log('Error: ' + err);
+                    res.status(500).send({'error': {'code': 500, 'message': err}});
+                }
+                res.send(items);
+            });
+        }
+    });
+};
+
+exports.findByCottageAndStart = function (req, res) {
+    var cottage = req.params.cottage;
+    var start = parseInt(req.params.start, 10);
+    console.log('Retrieving bookings by cottage: ' + cottage + ' and start: ' + start);
+    db.collection(DB_TABLE, function (err, collection) {
+        if (err) {
+            err = errors.formatError(err);
+            console.log('Error: ' + err);
+            res.status(400).send({'error': {'code': 400, 'message': err}});
+        } else {
+            collection.find({'start': { '$gte': start }, 'cottage': cottage}).toArray(function (err, items) {
+                if (err) {
+                    err = errors.formatError(err);
+                    console.log('Error: ' + err);
+                    res.status(500).send({'error': {'code': 500, 'message': err}});
+                }
+                res.send(items);
+            });
+        }
+    });
+};
+
+exports.findByCottageAndStartAndEnd = function (req, res) {
+    var cottage = req.params.cottage,
+        start = parseInt(req.params.start, 10),
+        end = parseInt(req.params.start, 10);
+    console.log('Retrieving bookings by cottage: ' + cottage + ' and start: ' + start + ' and end: ' + end);
+    db.collection(DB_TABLE, function (err, collection) {
+        if (err) {
+            err = errors.formatError(err);
+            console.log('Error: ' + err);
+            res.status(400).send({'error': {'code': 400, 'message': err}});
+        } else {
+            collection.find({'start': { '$gte': start }, 'end': { '$lt': end }, 'cottage': cottage}).toArray(function (err, items) {
+                if (err) {
+                    err = errors.formatError(err);
+                    console.log('Error: ' + err);
+                    res.status(500).send({'error': {'code': 500, 'message': err}});
+                }
+                res.send(items);
+            });
+        }
+    });
+};
+
 exports.findById = function (req, res) {
     var id = req.params.id;
-    console.log('Retrieving event by id: ' + id);
+    console.log('Retrieving booking by id: ' + id);
     db.collection(DB_TABLE, function (err, collection) {
         if (err) {
             err = errors.formatError(err);

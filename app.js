@@ -49,6 +49,11 @@ app.post('/api/' + version + '/login', users.login);
 app.get('/api/' + version + '/me', users.me);
 
 app.get('/api/' + version + '/bookings', bookings.findAll);
+
+app.get('/api/' + version + '/cottages/:cottage/bookings', bookings.findByCottage);
+app.get('/api/' + version + '/cottages/:cottage/bookings/:start', bookings.findByCottageAndStart);
+app.get('/api/' + version + '/cottages/:cottage/bookings/:start/:end', bookings.findByCottageAndStartAndEnd);
+
 app.get('/api/' + version + '/bookings/:id', bookings.findById);
 app.post('/api/' + version + '/bookings', bookings.addBooking);
 app.put('/api/' + version + '/bookings/:id', bookings.updateBooking);
